@@ -18,6 +18,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     // Цей метод викличеться АВТОМАТИЧНО, лише якщо токен валідний і не підроблений
     async validate(payload: any) {
         // Те, що ми тут повертаємо, NestJS автоматично покладе у об'єкт `request.user`
-        return { id: payload.sub, email: payload.email, username: payload.username };
+        return { id: payload.sub, username: payload.username };
     }
 }

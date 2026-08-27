@@ -15,26 +15,28 @@ export class TasksController {
   constructor(private tasksService: TasksService) { }
 
   @Get() // Обробляє GET /tasks
-  getAllTasks() {
-    return this.tasksService.getAllTasks();
+  getAllTasks(
+    @GetDecoratorUser() user: User
+  ) {
+    return this.tasksService.getAllTasks(user);
   }
 
   // TODO (Pipes): Додати ParseUUIDPipe до декоратора @Param("id")
   // Це автоматично перевірятиме, чи є переданий ID валідним UUID, перш ніж код піде далі
   @Get(":id")
-  getTasksById(@Param("id", ParseUUIDPipe) id: string) {
-    return this.tasksService.getTaskById(id);
+  getTasksById(@Param("id", ParseUUIDPipe) id: string, @GetDecoratorUser() user: User) {
+    return this.tasksService.getTaskById(id, user);
   }
 
   @Delete(":id")
-  deleteTask(@Param("id", ParseUUIDPipe) id: string) {
-    return this.tasksService.deleteTasks(id)
+  deleteTask(@Param("id", ParseUUIDPipe) id: string, @GetDecoratorUser() user: User) {
+    return this.tasksService.deleteTasks(id, user)
   }
 
 
   @Patch(":id/status")
-  updateTaskStatus(@Param("id", ParseUUIDPipe) id: string, @Body() updateTaskDto: UpdateTaskStatusDto) {
-    return this.tasksService.updateTaskStatus(id, updateTaskDto.status)
+  updateTaskStatus(@Param("id", ParseUUIDPipe) id: string, @Body() updateTaskDto: UpdateTaskStatusDto, @GetDecoratorUser() user: User) {
+    return this.tasksService.updateTaskStatus(id, updateTaskDto.status, user)
   }
 
 

@@ -13,13 +13,13 @@ export class TasksService {
     private tasksRepository: Repository<Task>,
   ) { }
 
-  getAllTasks() {
-    return this.tasksRepository.find();
+  getAllTasks(user: User) {
+    return this.tasksRepository.find({ where: { user } });
   }
 
 
-  async getTaskById(id: string) {
-    const found = await this.tasksRepository.findOne({ where: { id } });
+  async getTaskById(id: string, user: User) {
+    const found = await this.tasksRepository.findOne({ where: { id, user } });
     if (!found) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
     }
@@ -28,16 +28,16 @@ export class TasksService {
 
 
 
-  async deleteTasks(id: string) {
-    const result = await this.tasksRepository.delete({ id });
+  async deleteTasks(id: string, user: User) {
+    const result = await this.tasksRepository.delete({ id, user });
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
     }
     return result;
   }
 
-  async updateTaskStatus(id: string, status: TaskStatus) {
-    const task = await this.getTaskById(id);
+  async updateTaskStatus(id: string, status: TaskStatus, user: User) {
+    const task = await this.getTaskById(id, user);
     if (!task) {
       throw new NotFoundException(`Задачу з ID ${id} не знайдено`);
     }
